@@ -276,7 +276,7 @@ public class Menu {
 
 
 	/**
-	 * Meotdo main
+	 * Metodo main
 	 * @param args
 	 */
 	public static void main(String[] args) {

@@ -127,8 +127,26 @@ public class Buscaminas {
 	 */
 	private void inicializarPartida() {
 
-		// TODO
+		if(nivel == PRINCIPIANTE){
 
+			casillas = new Casilla[FILAS_PRINCIPIANTE][COLUMNAS_PRINCIPIANTE];
+			cantidadMinas = CANTIDAD_MINAS_PRINCIPANTE;
+		}
+
+		else if(nivel == INTERMEDIO){
+
+			casillas = new Casilla[FILAS_INTERMEDIO][COLUMNAS_INTERMEDIO];
+			cantidadMinas = CANTIDAD_MINAS_INTERMEDIO;
+		}
+
+		else{
+
+			casillas = new Casilla[FILAS_EXPERTO][COLUMNAS_EXPERTO];
+			cantidadMinas = CANTIDAD_MINAS_EXPERTO;
+		}
+
+		generarMinas();
+		inicializarCasillasLibres();
 	}
 
 
@@ -137,8 +155,15 @@ public class Buscaminas {
 	 */
 	public void inicializarCasillasLibres() {
 
-		// TODO
+		for(int x = 0; x < casillas.length; x++){
+			for(int y = 0; y < casillas[0].length; y++){
 
+				if(casillas[x][y] == null){
+
+					casillas[x][y] = new Casilla(Casilla.LIBRE);
+				}
+			}
+		}
 	}
 
 
@@ -160,9 +185,30 @@ public class Buscaminas {
 	 */
 	public void generarMinas() {
 
-		// TODO
-		
-	}
+		boolean generating = true;
+		int rowLimit, columnLimit, x, y;
+		int counter = 0;		
+
+		rowLimit = casillas.length;
+		columnLimit = casillas[0].length;
+
+		while(generating){
+
+			x = (int) Math.random() * rowLimit;
+			y = (int) Math.random() * columnLimit;
+
+			if(casillas[x][y] == null){
+
+				casillas[x][y] = new Casilla(Casilla.MINA);
+				counter++;
+
+				if(counter == cantidadMinas){
+
+					generating = false;
+				}
+			}		
+	    }
+    }
 
 
 	/**
@@ -171,9 +217,23 @@ public class Buscaminas {
 	 */
 	public String mostrarTablero() {
 
-		// TODO
+		String numbersX = "";
+		String numbersY = "";
+		String table = "";
 
-		return null;
+		for(int x = 0; x < casillas.length; x++){
+			for(int y = 0; y < casillas[0].length; y++){
+
+				if(casillas[x][y] != null){
+
+					table += casillas[x][y].mostrarValorCasilla();
+					numbersX += x+1 + "/n";
+					numbersY += y+1 + " ";
+				}
+			}
+		}
+
+		return table;
 	}
 
 
@@ -196,15 +256,29 @@ public class Buscaminas {
 
 
 	/**
-	 * Este metodo se encargaa de abrir una casilla
+	 * Este metodo se encarga de abrir una casilla
 	 * Si se abre una casilla de tipo Mina, se marca que el jugador perdio el juego.
 	 * @param i - la fila donde esta la casilla 
 	 * @param j - la columna donde esta la casilla
 	 * @return boolean - true si fue posible destaparla, false en caso contrario
 	 */
 	public boolean abrirCasilla(int i, int j) {
-		// TODO
-		return true;
+
+		boolean uncover = false;
+
+		if(casillas[i][j].darSeleccionada() != true){
+			if(casillas[i][j].getTipo() == Casilla.LIBRE){
+				
+				casillas[i][j].destapar();
+				uncover = true;
+			}
+			else{
+
+				perdio = true;
+			}
+		}
+
+		return uncover;
 	}
 
 

@@ -78,7 +78,15 @@ public class Casilla {
 	 * @return
 	 */
 	public boolean esMina(){
-		return tipo == MINA;
+
+		boolean mine = false;
+
+		if(tipo == MINA){
+
+			mine = true;
+		}
+
+		return mine;
 	}
 	
 	/**
@@ -86,6 +94,7 @@ public class Casilla {
 	 * @return El String con la representación actual de la casilla
 	 */
 	public String mostrarValorCasilla(){
+		
 		String valor = "";
 		
 		if(!seleccionada){
@@ -121,6 +130,15 @@ public class Casilla {
 	public int darValor(){
 		return valor;
 	}
+
+	/**
+	* This method allows getting the attribute tipo
+	* @return the tipo
+	*/
 	
+	public int getTipo(){
+
+		return tipo;
+	}
 	
 }
