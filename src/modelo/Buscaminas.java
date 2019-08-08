@@ -175,9 +175,51 @@ public class Buscaminas {
 	 */
 	public int cantidadMinasAlrededor(int i, int j) {
 
-		// TODO
+		int minesAround = 0;
+	//Up
+		if(casillas[i-1][j].esMina() == true){
 
-		return 0;
+			minesAround++;	
+		}
+	//Down
+		else if(casillas[i+1][j].esMina() == true){
+
+			minesAround++;
+		}
+	//Left
+		else if(casillas[i][j-1].esMina() == true){
+
+			minesAround++;
+		}
+	//Right
+		else if(casillas[i][j+1].esMina() == true){
+
+			minesAround++;
+		}
+	//Upper-right corner 
+		else if(casillas[i-1][j+1].esMina() == true){
+
+			minesAround++;
+		}
+	//Upper-left corner 
+		else if(casillas[i-1][j-1].esMina() == true){
+
+			minesAround++;
+		}
+	//Lower-right corner
+		else if(casillas[i+1][j+1].esMina() == true){
+
+			minesAround++;
+		}
+	//Lower-left corner
+		else if(casillas[i+1][j-1].esMina() == true){
+
+			minesAround++;
+		}
+
+		casillas[i][j].modificarValor(minesAround);
+
+		return minesAround;		
 	}
 
 	/**
@@ -226,7 +268,7 @@ public class Buscaminas {
 
 				if(casillas[x][y] != null){
 
-					table += casillas[x][y].mostrarValorCasilla();
+					table += casillas[x][y].mostrarValorCasilla() + " ";
 					numbersX += x+1 + "/n";
 					numbersY += y+1 + " ";
 				}
@@ -287,8 +329,38 @@ public class Buscaminas {
 	 * @return boolean - true si gano el juego, false en caso contrario
 	 */
 	public boolean gano() {
-		// TODO
-		return true;
+
+		boolean won = false;
+		int counter = 0;
+
+		for(int x = 0; x < casillas.length; x++){
+			for(int y = 0; y < casillas[0].length; y++){
+
+				if(casillas[x][y].darSeleccionada() == true){
+					if(casillas[x][y].getTipo() == Casilla.LIBRE){
+
+						counter++;
+					}
+				}
+			}
+		}
+
+		if(nivel == PRINCIPIANTE && counter == 54){
+
+			won = true;
+		}
+
+		if(nivel == INTERMEDIO && counter == 216){
+
+			won = true;
+		}
+
+		if(nivel == EXPERTO && counter == 381){
+
+			won = true;
+		}
+
+		return won;
 	}
 
 
@@ -298,8 +370,21 @@ public class Buscaminas {
 	 */
 	public String darPista() {
 
-		// TODO
-		return null;
+		String msg = "No hay pistas para dar";
+		boolean running = true;
+
+		for(int x = 0; x < casillas.length && running == true; x++){
+			for(int y = 0; y < casillas[0].length && running == true; y++){
+
+				if(casillas[x][y].esMina() != true && casillas[x][y].darValor() > 0){
+
+					casillas[x][y].destapar();
+					msg = "Se abrio la casilla " + x + ":" + y;
+				}
+			}
+		}
+
+		return msg;
 	}
 	
 	/***
