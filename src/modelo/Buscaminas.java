@@ -177,44 +177,60 @@ public class Buscaminas {
 
 		int minesAround = 0;
 	//Up
-		if(casillas[i-1][j].esMina() == true){
+		if(i-1 >= 0 && i-1 <= casillas.length){
+			if(casillas[i-1][j].esMina() == true){
 
-			minesAround++;	
+				minesAround++;
+			}	
 		}
 	//Down
-		else if(casillas[i+1][j].esMina() == true){
+		else if(i+1 >= 0 && i+1 <= casillas.length){
+			if(casillas[i+1][j].esMina() == true){
 
-			minesAround++;
+				minesAround++;
+			}
 		}
 	//Left
-		else if(casillas[i][j-1].esMina() == true){
+		else if(j-1 >= 0 && j-1 <= casillas[0].length){ 
+			if(casillas[i][j-1].esMina() == true){
 
-			minesAround++;
+				minesAround++;
+			}
 		}
 	//Right
-		else if(casillas[i][j+1].esMina() == true){
+		else if(j+1 >= 0 && j+1 <= casillas[0].length){ 
+			if(casillas[i][j+1].esMina() == true){
 
-			minesAround++;
+				minesAround++;
+			}
 		}
 	//Upper-right corner 
-		else if(casillas[i-1][j+1].esMina() == true){
+		else if(i-1 >= 0 && i-1 <= casillas.length && j+1 >= 0 && j+1 <= casillas[0].length){ 
+			if(casillas[i-1][j+1].esMina() == true){
 
-			minesAround++;
+				minesAround++;
+			}
 		}
 	//Upper-left corner 
-		else if(casillas[i-1][j-1].esMina() == true){
+		else if(i-1 >= 0 && i-1 <= casillas.length && j-1 >= 0 && j-1 <= casillas[0].length){ 
+			if(casillas[i-1][j-1].esMina() == true){
 
-			minesAround++;
+				minesAround++;
+			}
 		}
 	//Lower-right corner
-		else if(casillas[i+1][j+1].esMina() == true){
+		else if(i+1 >= 0 && i+1 <= casillas.length && j+1 >= 0 && j+1 <= casillas[0].length){ 
+			if(casillas[i+1][j+1].esMina() == true){
 
-			minesAround++;
+				minesAround++;
+			}
 		}
 	//Lower-left corner
-		else if(casillas[i+1][j-1].esMina() == true){
+		else if(i+1 >= 0 && i+1 <= casillas.length && j-1 >= 0 && j-1 <= casillas[0].length){ 
+			if(casillas[i+1][j-1].esMina() == true){
 
 			minesAround++;
+			}
 		}
 
 		casillas[i][j].modificarValor(minesAround);
@@ -283,8 +299,6 @@ public class Buscaminas {
 	 * Metodo que se encarga de marcar todas las casillas como destapadas
 	 */
 	public void resolver() {
-
-		// TODO
 
 	}
 
@@ -379,7 +393,7 @@ public class Buscaminas {
 				if(casillas[x][y].esMina() != true && casillas[x][y].darValor() > 0){
 
 					casillas[x][y].destapar();
-					msg = "Se abrio la casilla " + x + ":" + y;
+					msg = "Se abrio la casilla: " + x + ":" + y;
 				}
 			}
 		}
