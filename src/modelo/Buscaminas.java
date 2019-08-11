@@ -164,8 +164,17 @@ public class Buscaminas {
 				}
 			}
 		}
-	}
 
+		for(int x = 0; x < casillas.length; x++){
+			for(int y = 0; y < casillas[0].length; y++){
+
+				if(casillas[x][y].esMina() == false){
+
+					casillas[x][y].modificarValor(cantidadMinasAlrededor(x,y));
+				}
+			}
+		}
+	}
 
 	/**
 	 * Metodo que permite contar la cantidad de minas que tiene alrededor una casillas
@@ -177,63 +186,61 @@ public class Buscaminas {
 
 		int minesAround = 0;
 	//Up
-		if(i-1 >= 0 && i-1 <= casillas.length){
+		if(i-1 >= 0 && i-1 < casillas.length){
 			if(casillas[i-1][j].esMina() == true){
 
 				minesAround++;
 			}	
 		}
 	//Down
-		else if(i+1 >= 0 && i+1 <= casillas.length){
+		if(i+1 >= 0 && i+1 < casillas.length){
 			if(casillas[i+1][j].esMina() == true){
 
 				minesAround++;
 			}
 		}
 	//Left
-		else if(j-1 >= 0 && j-1 <= casillas[0].length){ 
+		if(j-1 >= 0 && j-1 < casillas[0].length){ 
 			if(casillas[i][j-1].esMina() == true){
 
 				minesAround++;
 			}
 		}
 	//Right
-		else if(j+1 >= 0 && j+1 <= casillas[0].length){ 
+		if(j+1 >= 0 && j+1 < casillas[0].length){ 
 			if(casillas[i][j+1].esMina() == true){
 
 				minesAround++;
 			}
 		}
 	//Upper-right corner 
-		else if(i-1 >= 0 && i-1 <= casillas.length && j+1 >= 0 && j+1 <= casillas[0].length){ 
+		if(i-1 >= 0 && i-1 < casillas.length && j+1 >= 0 && j+1 < casillas[0].length){ 
 			if(casillas[i-1][j+1].esMina() == true){
 
 				minesAround++;
 			}
 		}
 	//Upper-left corner 
-		else if(i-1 >= 0 && i-1 <= casillas.length && j-1 >= 0 && j-1 <= casillas[0].length){ 
+		if(i-1 >= 0 && i-1 < casillas.length && j-1 >= 0 && j-1 < casillas[0].length){ 
 			if(casillas[i-1][j-1].esMina() == true){
 
 				minesAround++;
 			}
 		}
 	//Lower-right corner
-		else if(i+1 >= 0 && i+1 <= casillas.length && j+1 >= 0 && j+1 <= casillas[0].length){ 
+		if(i+1 >= 0 && i+1 < casillas.length && j+1 >= 0 && j+1 < casillas[0].length){ 
 			if(casillas[i+1][j+1].esMina() == true){
 
 				minesAround++;
 			}
 		}
 	//Lower-left corner
-		else if(i+1 >= 0 && i+1 <= casillas.length && j-1 >= 0 && j-1 <= casillas[0].length){ 
+		if(i+1 >= 0 && i+1 < casillas.length && j-1 >= 0 && j-1 < casillas[0].length){ 
 			if(casillas[i+1][j-1].esMina() == true){
 
 			minesAround++;
 			}
 		}
-
-		casillas[i][j].modificarValor(minesAround);
 
 		return minesAround;		
 	}
@@ -252,8 +259,8 @@ public class Buscaminas {
 
 		while(generating){
 
-			x = (int) Math.random() * rowLimit;
-			y = (int) Math.random() * columnLimit;
+			x = (int) (Math.random() * rowLimit);
+			y = (int) (Math.random() * columnLimit);
 
 			if(casillas[x][y] == null){
 
@@ -275,23 +282,42 @@ public class Buscaminas {
 	 */
 	public String mostrarTablero() {
 
-		String numbersX = "";
-		String numbersY = "";
-		String table = "";
+		String board = "  ";
 
-		for(int x = 0; x < casillas.length; x++){
-			for(int y = 0; y < casillas[0].length; y++){
+		for(int i = 1; i < (casillas[0].length + 1); i++){
+			
+			if( i < 10){
 
-				if(casillas[x][y] != null){
+			board += "  " + i;
+			
+			}
+			else {
 
-					table += casillas[x][y].mostrarValorCasilla() + " ";
-					numbersX += x+1 + "/n";
-					numbersY += y+1 + " ";
-				}
+				board += " " + i;
 			}
 		}
 
-		return table;
+		board += "\n";
+
+		for(int x = 0; x < casillas.length; x++){
+			if(x < 9){
+
+				board += (x + 1) + " ";
+			}
+			else{
+
+				board += (x + 1);
+			}
+			for(int y = 0; y < casillas[0].length; y++){
+
+					board += "  " + casillas[x][y].mostrarValorCasilla() ;
+
+			}
+
+			board += "\n";
+		}
+
+		return board;
 	}
 
 
@@ -300,6 +326,15 @@ public class Buscaminas {
 	 */
 	public void resolver() {
 
+		for(int x = 0; x < casillas.length; x++){
+			for(int y = 0; y < casillas[0].length; y++){
+
+				if(casillas[x][y].darSeleccionada() == false){
+
+					casillas[x][y].destapar();
+				}
+			}
+		}
 	}
 
 	/**
@@ -390,10 +425,11 @@ public class Buscaminas {
 		for(int x = 0; x < casillas.length && running == true; x++){
 			for(int y = 0; y < casillas[0].length && running == true; y++){
 
-				if(casillas[x][y].esMina() != true && casillas[x][y].darValor() > 0){
+				if(casillas[x][y].esMina() != true && casillas[x][y].darSeleccionada() == false && casillas[x][y].darValor() > 0){
 
 					casillas[x][y].destapar();
-					msg = "Se abrio la casilla: " + x + ":" + y;
+					msg = "Se abrio la casilla: " + "("+ (x+1) + " , " + (y+1) + ")";
+					running = false;
 				}
 			}
 		}
