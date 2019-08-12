@@ -124,7 +124,7 @@ public class Casilla {
 	}
 	
 	/**
-	 *  Metodo dar del atributo valor
+	 * Metodo dar del atributo valor
 	 * @return el valor
 	 */
 	public int darValor(){

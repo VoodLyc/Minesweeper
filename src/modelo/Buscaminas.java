@@ -329,13 +329,10 @@ public class Buscaminas {
 		for(int x = 0; x < casillas.length; x++){
 			for(int y = 0; y < casillas[0].length; y++){
 
-				if(casillas[x][y].darSeleccionada() == false){
-
 					casillas[x][y].destapar();
 				}
 			}
 		}
-	}
 
 	/**
 	 * Metodo dar del atributo casillas
@@ -343,6 +340,15 @@ public class Buscaminas {
 	 */
 	public Casilla[][] darCasillas(){
 		return casillas;
+	}
+
+	/**
+	* This method allows setting the attribute casilla.
+	*/
+
+	public void setCasillas(Casilla[][] x){
+
+		casillas = x;
 	}
 
 
@@ -444,5 +450,4 @@ public class Buscaminas {
 	public boolean darPerdio(){
 		return perdio;
 	}
-
 }
