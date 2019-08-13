@@ -9,6 +9,7 @@
 
 
 package modelo;
+import modelo.IllegalValueException;
 
 public class Casilla {
 	
@@ -55,7 +56,20 @@ public class Casilla {
 	 * @param tipo - El tipo de la casilla
 	 */
 	public Casilla(int tipo) {
-		this.tipo = tipo;
+		
+		try{
+			this.tipo = tipo;
+			
+			if(tipo != MINA && tipo != LIBRE){
+
+				throw new IllegalValueException("Ingrese un valor valido");
+			}
+		}
+
+		catch(IllegalValueException e){
+
+			tipo = LIBRE;
+		}
 		seleccionada = false;
 		valor = -1;
 	}

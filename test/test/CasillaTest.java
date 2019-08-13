@@ -10,27 +10,39 @@ class CasillaTest {
 	
 	private Casilla casilla;
 	
-	private void setUpEscenarioCasillaLibre() {
+	private void setUpStageCasillaLibre() {
 		
 		casilla = new Casilla(Casilla.LIBRE);
 	}
 	
-	private void setUpEscenarioMina() {
+	private void setUpStageMina() {
 		
 		casilla = new Casilla(Casilla.MINA);
+	}
+	
+	private void setUpStageIllegalValueException(){
+		
+		casilla = new Casilla(200);
+	}
+
+	@Test
+	void testIllegalValueException() {
+
+		setUpStageIllegalValueException();
+		assertFalse(casilla.esMina());
 	}
 
 	@Test
 	void testDarValor() {
 		
-		setUpEscenarioCasillaLibre();
+		setUpStageCasillaLibre();
 		assertEquals(casilla.darValor(), -1);		
 	}
 
 	@Test
 	void testModificarValor() {
 
-		setUpEscenarioCasillaLibre();
+		setUpStageCasillaLibre();
 		casilla.modificarValor(3);
 		assertEquals(casilla.darValor(), 3);
 	}
@@ -38,7 +50,7 @@ class CasillaTest {
 	@Test
 	void testDestapar() {
 		
-		setUpEscenarioCasillaLibre();
+		setUpStageCasillaLibre();
 		casilla.destapar();
 		assertEquals(casilla.darSeleccionada(), true);
 	}
@@ -46,7 +58,7 @@ class CasillaTest {
 	@Test
 	void testDarSeleccionada() {
 
-		setUpEscenarioCasillaLibre();
+		setUpStageCasillaLibre();
 		assertEquals(casilla.darSeleccionada(), false);
 		casilla.destapar();
 		assertEquals(casilla.darSeleccionada(), true);
@@ -55,26 +67,26 @@ class CasillaTest {
 	@Test
 	void testGetTipo() {
 
-		setUpEscenarioCasillaLibre();
+		setUpStageCasillaLibre();
 		assertEquals(casilla.getTipo(), Casilla.LIBRE);
 	}
 	
 	@Test
 	void testEsMina() {
 
-		setUpEscenarioMina();
+		setUpStageMina();
 		assertEquals(casilla.esMina(), true);
 	}
 
 	@Test
 	void testMostrarValorCasilla() {
 
-		setUpEscenarioCasillaLibre();
+		setUpStageCasillaLibre();
 		assertEquals(casilla.mostrarValorCasilla(), "-");
 		casilla.destapar();
 		assertEquals(casilla.mostrarValorCasilla(), casilla.darValor()+"");
 
-		setUpEscenarioMina();
+		setUpStageMina();
 		assertEquals(casilla.mostrarValorCasilla(), "-");
 		casilla.destapar();
 		assertEquals(casilla.mostrarValorCasilla(), "*");

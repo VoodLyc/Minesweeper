@@ -12,79 +12,246 @@ class BuscaminasTest {
 	
 	private Buscaminas buscaminas;
 
-	private void setUpEscenarioPrincipiante() {
+	private void setUpStagePrincipiante() {
 		
 		buscaminas = new Buscaminas(Buscaminas.PRINCIPIANTE);
 	}
 
-	private void setUpEscenarioIntermedio(){
+	private void setUpStageIntermedio(){
 		
 		buscaminas = new Buscaminas(Buscaminas.INTERMEDIO);
 	}
 
-	private void setUpEscenarioExperto(){
+	private void setUpStageExperto(){
 
 		buscaminas = new Buscaminas(Buscaminas.EXPERTO);
+	}
+
+	private void setUpStageAbrirCasilla(){
+
+		buscaminas = new Buscaminas(Buscaminas.PRINCIPIANTE);
+		Casilla[][] casillas = new Casilla[3][3];
+		casillas[2][2] = new Casilla(Casilla.MINA);
+		buscaminas.setCasillas(casillas);
+		buscaminas.inicializarCasillasLibres();
+	}
+
+	private void setUpStageGano(){
+
+		buscaminas = new Buscaminas(Buscaminas.PRINCIPIANTE);
+		Casilla[][] casillas = new Casilla[3][3];
+		casillas[0][0] = new Casilla(Casilla.MINA);
+		casillas[0][1] = new Casilla(Casilla.MINA);
+		casillas[0][2] = new Casilla(Casilla.MINA);
+		casillas[1][0] = new Casilla(Casilla.MINA);
+		casillas[1][1] = new Casilla(Casilla.LIBRE);
+		casillas[1][2] = new Casilla(Casilla.MINA);
+		casillas[2][0] = new Casilla(Casilla.MINA);
+		casillas[2][1] = new Casilla(Casilla.MINA);
+		casillas[2][2] = new Casilla(Casilla.MINA);
+
+		buscaminas.setCasillas(casillas);
+	}
+
+	private void setUpStageDarPista(){
+
+		buscaminas = new Buscaminas(Buscaminas.PRINCIPIANTE);
+		Casilla[][] casilla = new Casilla[3][3];
+		casilla[2][2] = new Casilla(Casilla.MINA);
+		buscaminas.setCasillas(casilla);
+		buscaminas.inicializarCasillasLibres();
+	}
+
+	private void setUpStageCantidadMinasAlrededor(){
+
+		buscaminas = new Buscaminas(Buscaminas.PRINCIPIANTE);
+		Casilla[][] casilla = new Casilla[3][3];
+		casilla[2][2] = new Casilla(Casilla.MINA);
+		buscaminas.setCasillas(casilla);
+		buscaminas.inicializarCasillasLibres();
+	}
+
+	@Test
+	void testIllegalCoordinatesException(){
+
+		setUpStagePrincipiante();
+
+		assertFalse(buscaminas.abrirCasilla(223,390));
+	}
+
+	@Test
+	void testCantidadMinasAlrededor(){
+
+		setUpStageCantidadMinasAlrededor();
+		Casilla[][] casilla;
+		
+		assertEquals(buscaminas.cantidadMinasAlrededor(1,1), 1);
+		
+		casilla = buscaminas.darCasillas();
+		casilla[0][0] = new Casilla(Casilla.MINA);
+		buscaminas.setCasillas(casilla);
+
+		assertEquals(buscaminas.cantidadMinasAlrededor(1,1), 2);
+
+		casilla = new Casilla[3][3];
+		casilla[0][0] = new Casilla(Casilla.MINA);
+		casilla[0][1] = new Casilla(Casilla.MINA);
+		casilla[0][2] = new Casilla(Casilla.MINA);
+		casilla[1][0] = new Casilla(Casilla.MINA);
+		casilla[1][2] = new Casilla(Casilla.MINA);
+		casilla[2][0] = new Casilla(Casilla.MINA);
+		casilla[2][1] = new Casilla(Casilla.MINA);
+		casilla[2][2] = new Casilla(Casilla.MINA);
+
+		buscaminas.setCasillas(casilla);
+		buscaminas.inicializarCasillasLibres();
+
+		assertEquals(buscaminas.cantidadMinasAlrededor(1,1), 8);
+	}
+
+	@Test
+	void testMostrarTablero() {
+
+		setUpStagePrincipiante();
+		String board;
+		board = buscaminas.mostrarTablero();
+		buscaminas.resolver();
+
+		assertNotEquals(buscaminas.mostrarTablero(), board);
+
+		buscaminas = new Buscaminas(Buscaminas.INTERMEDIO);
+		board = buscaminas.mostrarTablero();
+		buscaminas.resolver();
+
+		assertNotEquals(buscaminas.mostrarTablero(), board);
+	}
+
+	@Test
+	void testDarPista() {
+
+		setUpStageDarPista();
+		
+		assertEquals(buscaminas.darPista(), "Se abrio la casilla: (2 , 2)");
+		assertEquals(buscaminas.darPista(), "Se abrio la casilla: (2 , 3)");
+		assertEquals(buscaminas.darPista(), "Se abrio la casilla: (3 , 2)");
+		assertEquals(buscaminas.darPista(), "No hay pistas para dar");
+	}
+
+	@Test
+	void testGano() {
+
+		setUpStageGano();
+
+		assertTrue(buscaminas.gano() == false);
+		buscaminas.abrirCasilla(1,1);
+		assertTrue(buscaminas.gano() == true);
+	}
+
+	@Test
+	void testAbrirCasilla() {
+
+		setUpStageAbrirCasilla();
+		buscaminas.abrirCasilla(1,1);
+		Casilla[][] casillas = buscaminas.darCasillas();
+
+		assertEquals(casillas[1][1].darSeleccionada(), true);
+		assertEquals(buscaminas.abrirCasilla(1,1), false);
+
+		buscaminas.abrirCasilla(2,2);
+		casillas = buscaminas.darCasillas();
+
+		assertEquals(buscaminas.darPerdio(), true);
+
 	}
 
 	@Test
 	void testResolverPrincipiante() {
 
-		setUpEscenarioPrincipiante();
+		setUpStagePrincipiante();
 		buscaminas.resolver();
+		int uncovers = 0;
+		int covers = 0;
 		Casilla[][] casillas = buscaminas.darCasillas();
-		
+		casillas[3][5] = new Casilla(Casilla.LIBRE);
+				
 		for(int x = 0; x < casillas.length; x++){
 			for(int y = 0; y < casillas[0].length; y++){
 
-				if(casillas[x][y].darSeleccionada() == false){
+				if(casillas[x][y].darSeleccionada() == true){
 					
-					fail("Not all boxes are uncovered");
+					uncovers++;
+				}
+				else {
+					
+					covers++;
 				}
 			}
 		}
+		
+		assertEquals(uncovers, 63);
+		assertEquals(covers, 1);
 	}
-
+	
 	@Test
 	void testResolverIntermedio() {
 
-		setUpEscenarioIntermedio();
+		setUpStageIntermedio();
 		buscaminas.resolver();
+		int uncovers = 0;
+		int covers = 0;
 		Casilla[][] casillas = buscaminas.darCasillas();
-		
+		casillas[3][5] = new Casilla(Casilla.LIBRE);
+				
 		for(int x = 0; x < casillas.length; x++){
 			for(int y = 0; y < casillas[0].length; y++){
 
-				if(casillas[x][y].darSeleccionada() == false){
+				if(casillas[x][y].darSeleccionada() == true){
 					
-					fail("Not all boxes are uncovered");
+					uncovers++;
+				}
+				else {
+					
+					covers++;
 				}
 			}
 		}
+		
+		assertEquals(uncovers, 255);
+		assertEquals(covers, 1);
 	}
 
 	@Test
 	void testResolverExperto() {
 
-		setUpEscenarioExperto();
+		setUpStageExperto();
 		buscaminas.resolver();
+		int uncovers = 0;
+		int covers = 0;
 		Casilla[][] casillas = buscaminas.darCasillas();
-		
+		casillas[3][5] = new Casilla(Casilla.LIBRE);
+				
 		for(int x = 0; x < casillas.length; x++){
 			for(int y = 0; y < casillas[0].length; y++){
 
-				if(casillas[x][y].darSeleccionada() == false){
+				if(casillas[x][y].darSeleccionada() == true){
 					
-					fail("Not all boxes are uncovered");
+					uncovers++;
+				}
+				else {
+					
+					covers++;
 				}
 			}
 		}
+		
+		assertEquals(uncovers, 479);
+		assertEquals(covers, 1);
 	}
 
 	@Test
 	void testGenerarMinasPrincipiante() {
 
-		setUpEscenarioPrincipiante();
+		setUpStagePrincipiante();
 		Casilla[][] casillas1 = buscaminas.darCasillas();
 		Casilla[][] casillas2 = new Casilla[Buscaminas.FILAS_PRINCIPIANTE][Buscaminas.COLUMNAS_PRINCIPIANTE];
 		buscaminas.setCasillas(casillas2);
@@ -97,7 +264,7 @@ class BuscaminasTest {
 	@Test
 	void testGenerarMinasIntermedio() {
 
-		setUpEscenarioIntermedio();
+		setUpStageIntermedio();
 		Casilla[][] casillas1 = buscaminas.darCasillas();
 		Casilla[][] casillas2 = new Casilla[Buscaminas.FILAS_INTERMEDIO][Buscaminas.COLUMNAS_INTERMEDIO];
 		buscaminas.setCasillas(casillas2);
@@ -110,7 +277,7 @@ class BuscaminasTest {
 	@Test
 	void testGenerarMinasExperto() {
 
-		setUpEscenarioExperto();
+		setUpStageExperto();
 		Casilla[][] casillas1 = buscaminas.darCasillas();
 		Casilla[][] casillas2 = new Casilla[Buscaminas.FILAS_EXPERTO][Buscaminas.COLUMNAS_EXPERTO];
 		buscaminas.setCasillas(casillas2);
@@ -123,7 +290,7 @@ class BuscaminasTest {
 	@Test
 	void testInicializarPartidaPrincipiante() {
 
-		setUpEscenarioPrincipiante();
+		setUpStagePrincipiante();
 		int minesQuantity = 0;
 		int freeBoxes = 0;
 		int row = 0;
@@ -140,7 +307,7 @@ class BuscaminasTest {
 
 					minesQuantity++;
 				}
-				else if(casillas[x][y].esMina() == false){
+				else{
 
 					freeBoxes++;
 				}
@@ -156,7 +323,7 @@ class BuscaminasTest {
 	@Test
 	void testInicializarPartidaIntermedio() {
 
-		setUpEscenarioIntermedio();
+		setUpStageIntermedio();
 		int minesQuantity = 0;
 		int freeBoxes = 0;
 		int row = 0;
@@ -173,7 +340,7 @@ class BuscaminasTest {
 
 					minesQuantity++;
 				}
-				else if(casillas[x][y].esMina() == false){
+				else{
 
 					freeBoxes++;
 				}
@@ -189,7 +356,7 @@ class BuscaminasTest {
 	@Test
 	void testInicializarPartidaExperto() {
 
-		setUpEscenarioExperto();
+		setUpStageExperto();
 		int minesQuantity = 0;
 		int freeBoxes = 0;
 		int row = 0;
@@ -206,7 +373,7 @@ class BuscaminasTest {
 
 					minesQuantity++;
 				}
-				else if(casillas[x][y].esMina() == false){
+				else{
 
 					freeBoxes++;
 				}

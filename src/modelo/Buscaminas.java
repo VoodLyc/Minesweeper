@@ -9,6 +9,7 @@
 
 
 package modelo;
+import modelo.IllegalCoordinatesException;
 
 
 public class Buscaminas {
@@ -182,68 +183,22 @@ public class Buscaminas {
 	 * @param j - la columna de la matriz
 	 * @return int - La cantidad de minas que tiene alrededor la casilla [i][j]
 	 */
-	public int cantidadMinasAlrededor(int i, int j) {
+	public int cantidadMinasAlrededor(int x, int y) { 
+        
+        int mines = 0;
 
-		int minesAround = 0;
-	//Up
-		if(i-1 >= 0 && i-1 < casillas.length){
-			if(casillas[i-1][j].esMina() == true){
-
-				minesAround++;
-			}	
-		}
-	//Down
-		if(i+1 >= 0 && i+1 < casillas.length){
-			if(casillas[i+1][j].esMina() == true){
-
-				minesAround++;
-			}
-		}
-	//Left
-		if(j-1 >= 0 && j-1 < casillas[0].length){ 
-			if(casillas[i][j-1].esMina() == true){
-
-				minesAround++;
-			}
-		}
-	//Right
-		if(j+1 >= 0 && j+1 < casillas[0].length){ 
-			if(casillas[i][j+1].esMina() == true){
-
-				minesAround++;
-			}
-		}
-	//Upper-right corner 
-		if(i-1 >= 0 && i-1 < casillas.length && j+1 >= 0 && j+1 < casillas[0].length){ 
-			if(casillas[i-1][j+1].esMina() == true){
-
-				minesAround++;
-			}
-		}
-	//Upper-left corner 
-		if(i-1 >= 0 && i-1 < casillas.length && j-1 >= 0 && j-1 < casillas[0].length){ 
-			if(casillas[i-1][j-1].esMina() == true){
-
-				minesAround++;
-			}
-		}
-	//Lower-right corner
-		if(i+1 >= 0 && i+1 < casillas.length && j+1 >= 0 && j+1 < casillas[0].length){ 
-			if(casillas[i+1][j+1].esMina() == true){
-
-				minesAround++;
-			}
-		}
-	//Lower-left corner
-		if(i+1 >= 0 && i+1 < casillas.length && j-1 >= 0 && j-1 < casillas[0].length){ 
-			if(casillas[i+1][j-1].esMina() == true){
-
-			minesAround++;
-			}
-		}
-
-		return minesAround;		
-	}
+        for(int i = (x - 1); i <= (x + 1); i++){
+            for(int j = (y - 1); j <= (y + 1); j++){
+                if(i >= 0 && i < casillas.length && j >= 0 && j < casillas[0].length){
+                    if(casillas[i][j].esMina() == true){
+                        
+                        mines++;
+                    }
+                }
+            }
+        }
+        return mines;
+    }
 
 	/**
 	 * Método que se encarga de generar aleatoriomente las minas
@@ -385,37 +340,20 @@ public class Buscaminas {
 	 */
 	public boolean gano() {
 
-		boolean won = false;
-		int counter = 0;
+		boolean won = true;
 
-		for(int x = 0; x < casillas.length; x++){
-			for(int y = 0; y < casillas[0].length; y++){
+        for(int x = 0; x < casillas.length && won; x++){
+            for(int y = 0; y < casillas[0].length && won; y++){
 
-				if(casillas[x][y].darSeleccionada() == true){
-					if(casillas[x][y].getTipo() == Casilla.LIBRE){
+                if(!casillas[x][y].esMina() && !casillas[x][y].darSeleccionada()){
+                    
+                    won = false;
+                }
 
-						counter++;
-					}
-				}
-			}
-		}
+            }
+        }
 
-		if(nivel == PRINCIPIANTE && counter == 54){
-
-			won = true;
-		}
-
-		if(nivel == INTERMEDIO && counter == 216){
-
-			won = true;
-		}
-
-		if(nivel == EXPERTO && counter == 381){
-
-			won = true;
-		}
-
-		return won;
+        return won;
 	}
 
 

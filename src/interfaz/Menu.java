@@ -12,6 +12,7 @@ package interfaz;
 
 import java.util.Scanner;
 import modelo.Buscaminas;
+import java.util.InputMismatchException;
 
 public class Menu {
 	
@@ -125,15 +126,33 @@ public class Menu {
 
 		boolean abrir = false;
 		System.out.println("Por favor digite el número de la fila que desea abrir");
-		int i = lector.nextInt();
-		i--;
-		lector.nextLine();		
+		int i = -1;
+
+		try{
+
+			i = lector.nextInt();
+			i--;
+			lector.nextLine();
+		}
+		catch(InputMismatchException e){
+
+			lector.next();
+		}
 
 		System.out.println("Por favor digite el número de la columna que desea abrir");
-		int j = lector.nextInt();
-		j--;
-		lector.nextLine();		
+		int j = -1;
 
+		try{
+
+			j = lector.nextInt();
+			j--;
+			lector.nextLine();
+		}
+		catch(InputMismatchException e){
+
+			lector.next();
+		}
+				
 		if(i>=0 && i<juego.darCasillas().length && j>=0 && j<juego.darCasillas()[0].length){
 			abrir = juego.abrirCasilla(i,j);			
 		}else {
@@ -154,9 +173,16 @@ public class Menu {
 		System.out.println("2. Dar pista ");
 		System.out.println("3. Ver la solución del Buscaminas ");
 		System.out.println("4. Salir ");
+		int valor = 0;
+		
+		try{
+			valor = lector.nextInt();
+			lector.nextLine();
+		}
+		catch(InputMismatchException e){
 
-		int valor = lector.nextInt();
-		lector.nextLine();			
+			lector.next();
+		}		
 		return valor;
 	}
 
@@ -183,8 +209,10 @@ public class Menu {
 	 * Metodo que muestra el Menu donde el usuario elige la dificultad del buscaminas
 	 * @return int - el valor de dificultad seleccionado por el usuario
 	 */
+	
 	public int seleccionarDificultad() {
 
+		
 		int seleccion = -1;
 
 		while (seleccion<1 || seleccion>3) {
@@ -194,9 +222,14 @@ public class Menu {
 			System.out.println("2. Intermedio ");
 			System.out.println("3. Experto ");
 			
-			seleccion = lector.nextInt();
-			lector.nextLine();
+		try{	
+				seleccion = lector.nextInt();
+				lector.nextLine();
+			}
+			catch(InputMismatchException e){
 
+				lector.next();
+			}
 			if(seleccion<1 || seleccion>3){
 				System.out.println("Por favor ingrese un valor correcto");
 			}
@@ -204,7 +237,6 @@ public class Menu {
 
 		return seleccion;
 	}
-
 
 	/**
 	 * Metodo que muestra un banner de bienvenida
