@@ -69,6 +69,7 @@ public class Casilla {
 		catch(IllegalValueException e){
 
 			tipo = LIBRE;
+			e.printStackTrace();
 		}
 		seleccionada = false;
 		valor = -1;

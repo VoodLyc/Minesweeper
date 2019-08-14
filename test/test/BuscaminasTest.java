@@ -72,11 +72,35 @@ class BuscaminasTest {
 	}
 
 	@Test
+	void testIllegalValueException() {
+		
+		buscaminas = new Buscaminas(4);
+		buscaminas = new Buscaminas(-1);
+	}
+
+	@Test
 	void testIllegalCoordinatesException(){
 
 		setUpStagePrincipiante();
 
 		assertFalse(buscaminas.abrirCasilla(223,390));
+		assertFalse(buscaminas.abrirCasilla(2,390));
+		assertFalse(buscaminas.abrirCasilla(223,1));
+		assertFalse(buscaminas.abrirCasilla(-1,-24));
+		assertFalse(buscaminas.abrirCasilla(-1,3));
+		assertFalse(buscaminas.abrirCasilla(4,-1));
+		
+		Casilla[][] casillas = buscaminas.darCasillas();
+
+		for(int x = 0; x < casillas.length; x++){
+			for(int y = 0; y < casillas[0].length; y++){
+
+				if(!casillas[x][y].esMina()){
+
+					assertTrue(buscaminas.abrirCasilla(x,y));
+				}
+			}
+		}
 	}
 
 	@Test

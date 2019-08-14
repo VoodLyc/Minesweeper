@@ -112,7 +112,21 @@ public class Buscaminas {
 	 * @param nivel - el nivel seleccionado por el usuario
 	 */
 	public Buscaminas(int nivel) {
-		this.nivel = nivel;
+		
+		try{
+
+			this.nivel = nivel;
+
+			if(nivel != 1 && nivel != 2 && nivel != 3){
+
+				throw new IllegalLevelException("Ese nivel de dificultad no existe");
+			}
+		}
+		catch(IllegalLevelException e){
+
+			nivel = 1;
+			e.printStackTrace(); 
+		}
 		perdio = false;
 		inicializarPartida();
 
@@ -300,12 +314,10 @@ public class Buscaminas {
 	/**
 	* This method allows setting the attribute casilla.
 	*/
-
 	public void setCasillas(Casilla[][] x){
 
 		casillas = x;
 	}
-
 
 	/**
 	 * Este metodo se encarga de abrir una casilla
@@ -318,15 +330,31 @@ public class Buscaminas {
 
 		boolean uncover = false;
 
-		if(casillas[i][j].darSeleccionada() != true){
-			if(casillas[i][j].getTipo() == Casilla.LIBRE){
-				
-				casillas[i][j].destapar();
-				uncover = true;
-			}
-			else{
+		if(i >= 0 && i < casillas.length && j >= 0 && j < casillas[0].length){
 
-				perdio = true;
+			if(casillas[i][j].darSeleccionada() != true){
+				if(casillas[i][j].getTipo() == Casilla.LIBRE){
+				
+					casillas[i][j].destapar();
+					uncover = true;
+				}
+				else{
+
+					perdio = true;
+				}
+			}
+
+		}
+
+		else{
+
+			try{
+
+				throw new IllegalCoordinatesException("No se puede abrir la casilla porque no existe");
+			}
+			catch(IllegalCoordinatesException e){
+
+				e.printStackTrace();
 			}
 		}
 
